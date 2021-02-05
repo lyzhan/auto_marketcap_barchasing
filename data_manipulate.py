@@ -8,13 +8,11 @@ from pathlib import Path
 #%%
 start=dt.datetime(2010,7,1,0,0,0)
 end=dt.datetime(2021,2,1,0,0,0)
-timedf=pd.date_range(start, end,freq='1MS')
+timelist=pd.date_range(start, end,freq='1MS').to_list()
 pathlist = Path('.').glob('*.txt')
-# df_dump=pd.DataFrame(columns=timedf)
 #%%
 data_dump=[]
 namelist=[]
-timelist=timedf.to_list()
 for path in pathlist:
     # because path is object not string
     path_in_str = str(path)
@@ -33,7 +31,7 @@ for path in pathlist:
             pass# print('Missing at '+tm.strftime('%Y%M')+' for '+path_in_str)
     data_dump.append(monthlydata)
 
-df_dump=pd.DataFrame(data_dump,columns=timedf)
+df_dump=pd.DataFrame(data_dump,columns=[tm.strftime('%Y-%b') for tm in timelist])
 df_dump.set_index([pd.Index(namelist)],inplace=True)
 
 #%%
